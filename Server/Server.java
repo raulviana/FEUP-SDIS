@@ -21,7 +21,21 @@ public class Server{
 
         socket.receive(packet);
         String pedido = new String(request, 0, packet.getLength());
-        System.out.println("pedido: " + pedido);
+ 
+        String[] list = pedido.split(" ", 100);
+
+        switch (list[0]){
+            case "LOOKUP":
+
+                break;
+            case "REGISTER":
+
+                break;
+            default:
+                //Must handle error
+                System.exit(1);
+        }
+        
 
         socket.close();
     } 
