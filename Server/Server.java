@@ -23,7 +23,7 @@ while(true){
         socket.receive(packet);
         String pedido = new String(request, 0, packet.getLength());
  
-        //List = {request_type, list_of_requests}
+        //list = {request_type, request1, request2_if_exists}
         String[] list = pedido.split(" ", 100);
         String rmessage = new String();
         
@@ -34,10 +34,12 @@ while(true){
                 if(rmessage == null){
                     rmessage = "ERROR";
                 }
+                System.out.println("Server: " + list[0] + " " + list[1]);
                 break;
             case "REGISTER":
                 dns.put(list[1], list[2]);
                 rmessage = "OK";
+                System.out.println("Server: " + list[0] + " " + list[1] + " " + list[2]);
                 break;
             default:
                 //Must handle error
@@ -51,8 +53,6 @@ while(true){
         socket.send(rpacket);
     
         socket.close();
-
-        System.out.println(Arrays.asList(dns));
-    }
+        }
     } 
 }
