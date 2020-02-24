@@ -16,6 +16,7 @@ public class Client {
         InetAddress adress = InetAddress.getByName(args[0]);
         String message = args[2] + " " + args[3];
         byte[] sbuf = message.getBytes();
+        byte[] rbuf = new byte[256];
         
         
         
@@ -23,13 +24,15 @@ public class Client {
         DatagramPacket packet = new DatagramPacket(sbuf, sbuf.length, adress, port);
 
         socket.send(packet);
-
-      /*  byte[] rbuf = new byte[256];
+        
+        
         DatagramPacket rpacket = new DatagramPacket(rbuf, rbuf.length);
         socket.receive(rpacket);
-        String response = new String(rbuf, 0, rpacket.getLength());
-        System.out.println("response: " + response);
-*/
+        String response = new String(rbuf, 0, packet.getLength());
+
         socket.close();
+
+        System.out.println("Client: " + args[2] + " " + args[3] + " : " + response);
+
     }
 }
