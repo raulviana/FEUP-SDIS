@@ -12,6 +12,7 @@ public class Client {
         
 
         //Prepare message
+    try{
         int port = Integer.parseInt(args[1]);
         InetAddress adress = InetAddress.getByName(args[0]);
         String message = args[2] + " " + args[3];
@@ -33,6 +34,12 @@ public class Client {
         socket.close();
 
         System.out.println("Client: " + args[2] + " " + args[3] + " : " + response);
-
+    }
+    catch(SocketException ex){
+        System.out.println("Timeout error: " + ex.getMessage());
+    }
+    catch(IOException ex){
+        System.out.println("Client error: " + ex.getMessage());
+    }
     }
 }

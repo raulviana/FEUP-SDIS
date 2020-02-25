@@ -16,7 +16,10 @@ public class Server{
         HashMap<String, String> dns = new HashMap<>();
         int port = Integer.parseInt(args[0]);
         byte[] request = new byte[256];
-while(true){
+
+
+    while(true){
+        try{
         DatagramSocket socket = new DatagramSocket(port);
         DatagramPacket packet = new DatagramPacket(request, request.length);
 
@@ -54,5 +57,12 @@ while(true){
     
         socket.close();
         }
+        catch(SocketException ex){
+            System.out.println("Socket error: " + ex.getMessage());
+        }
+        catch(IOException ex){
+            System.out.println("I/0 error: " + ex.getMessage());
+        }
+    }
     } 
 }
