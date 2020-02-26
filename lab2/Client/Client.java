@@ -6,21 +6,34 @@ import java.net.*;
 public class Client {
     public static void main(String[] args) throws IOException{
         if(args.length != 4){
-            System.out.println("Usage: java Client <host> <port> <oper> <opnd>");
+            System.out.println("Usage: java Client <mcast_addr> <mcast_port> <oper> <opnd>");
             System.exit(1);
         }
         
 
         //Prepare message
-    try{
-        int port = Integer.parseInt(args[1]);
-        InetAddress adress = InetAddress.getByName(args[0]);
+    //try{
+
+        int multicast_port = Integer.parseInt(args[1]);
+        InetAddress multicast_adress = InetAddress.getByName(args[0]);
         String message = args[2] + " " + args[3];
         byte[] sbuf = message.getBytes();
         byte[] rbuf = new byte[256];
+        byte[] mbuf = new byte[256];
         
         
-        
+        MulticastSocket msocket = new MulticastSocket();
+        DatagramPacket mpacket = new DatagramPacket(mbuf, mbuf.length);
+        msocket.joinGroup(multicast_adress);
+        msocket.setLoopbackMode(true);
+        msocket.setTimeToLive(1);
+        msocket.receive(mpacket);
+        String serverIP = new String(rbuf, 0, mpacket.getLength());
+        System.out.println("Server IP: " + serverIP);
+
+        msocket.close();
+    }
+        /*
         DatagramSocket socket = new DatagramSocket();
         DatagramPacket packet = new DatagramPacket(sbuf, sbuf.length, adress, port);
 
@@ -41,5 +54,5 @@ public class Client {
     catch(IOException ex){
         System.out.println("Client error: " + ex.getMessage());
     }
-    }
+    }*/
 }
