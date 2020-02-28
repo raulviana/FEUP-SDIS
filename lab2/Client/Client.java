@@ -26,21 +26,20 @@ public class Client {
 
         socket.receive(packet);
 
-        socket.leaveGroup(multicast_adress);
-        
-
         String response = new String(mbuf, 0, packet.getLength());
-        int serverPort = packet.getPort();
+        int serverPort = Integer.parseInt(response);
         InetAddress serverIP = packet.getAddress();
+        
+        socket.leaveGroup(multicast_adress);
         socket.close();
        
        
         String request = args[2] + " " + args[3];
         byte[] sbuf = request.getBytes();
-       
+
         DatagramSocket rsocket = new DatagramSocket();
         DatagramPacket rpacket = new DatagramPacket(sbuf, sbuf.length, serverIP, serverPort);
-
+        
         rsocket.send(rpacket);
     
    
@@ -51,7 +50,7 @@ public class Client {
 
         rsocket.close();
 
-        System.out.println("Client: " + args[2] + " " + args[3] + " : " + response);
+        System.out.println("Client: " + args[2] + " " + args[3] + " : " + server_reply);
     }
     catch(SocketException ex){
         System.out.println("Timeout error: " + ex.getMessage());

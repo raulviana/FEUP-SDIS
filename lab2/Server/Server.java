@@ -21,7 +21,13 @@ public class Server{
         HashMap<String, String> dns = new HashMap<>();
         int port = Integer.parseInt(args[0]);
         InetAddress madress = InetAddress.getByName(args[1]);
-        InetAddress serverIP = InetAddress.getLocalHost();
+
+        //To get the apporpriate IP when are multiple netwprk interfaces
+        DatagramSocket dummy_socket = new DatagramSocket();
+        dummy_socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+        String serverIP = dummy_socket.getLocalAddress().getHostAddress();
+        dummy_socket.close();
+        
         int mport = Integer.parseInt(args[2]);
         String multicast_message = args[0];
         byte[] request = new byte[256];
@@ -33,11 +39,15 @@ public class Server{
         DatagramPacket mpacket = new DatagramPacket(mbuf, mbuf.length, madress, mport);
         
 
-        ScheduledExecutorService multicast_loop = Executors.newScheduledThreadPool(2);
+        ScheduledExecutorService thread_pool = Executors.newScheduledThreadPool(2);
         Runnable task1 = () -> {
                         try {
                             msocket.send(mpacket);
-                            System.out.println("multicast: " + madress.getHostAddress() + " " + mport + " : " + serverIP.getHostAddress() + " " + port);
+                            System.out.println("multicast: " + 
+                                                madress.getHostAddress() + " " + 
+                                                mport + " : " +    
+                                                serverIP + " " + 
+                                                port);
                         }
                         catch (Exception e) {
                             throw new IllegalStateException(e);
@@ -45,14 +55,13 @@ public class Server{
                     };
         int initialDelay = 0;
         int period = 1;
-        multicast_loop.scheduleAtFixedRate(task1, initialDelay, period, TimeUnit.SECONDS);
-
+        thread_pool.scheduleAtFixedRate(task1, initialDelay, period, TimeUnit.SECONDS);
+        
         Runnable task2 = () -> {
-        while(true){
-                try{
+            while(true){    
+            try{
                 DatagramSocket socket = new DatagramSocket(port);
                 DatagramPacket packet = new DatagramPacket(request, request.length);
-
                 socket.receive(packet);
                 String pedido = new String(request, 0, packet.getLength());
         
@@ -93,9 +102,12 @@ public class Server{
                 catch(IOException ex){
                     System.out.println("I/0 error: " + ex.getMessage());
                 }
-            }
-    };  
-    } 
+        }
+    };
+    System.out.println("Starting thread task2"); 
+    thread_pool.execute(task2);
+    }
+
 }
 
 
