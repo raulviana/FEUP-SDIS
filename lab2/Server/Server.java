@@ -4,19 +4,48 @@ import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.concurrent.*;
+
+
 
 public class Server{
    
     public static void main(String[] args) throws IOException{
-        if(args.length != 1){
-            System.out.println("Usage: java Server <port number> ");
+        if(args.length != 3){
+            System.out.println("Usage: java Server <srvc_port> <mcast_addr> <mcast_port> ");
             System.exit(1);
         }
-         
+        
+
+        //Preparing 
         HashMap<String, String> dns = new HashMap<>();
         int port = Integer.parseInt(args[0]);
+        InetAddress madress = InetAddress.getByName(args[1]);
+        InetAddress serverIP = InetAddress.getLocalHost();
+        int mport = Integer.parseInt(args[2]);
+        String multicast_message = args[0];
         byte[] request = new byte[256];
+        
+        
 
+        byte[] mbuf = multicast_message.getBytes();
+        DatagramSocket msocket = new DatagramSocket();
+        DatagramPacket mpacket = new DatagramPacket(mbuf, mbuf.length, madress, mport);
+        
+
+        ScheduledExecutorService multicast_loop = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> {
+                        try {
+                            msocket.send(mpacket);
+                            System.out.println("multicast: " + madress.getHostAddress() + " " + mport + " : " + serverIP.getHostAddress() + " " + port);
+                        }
+                        catch (Exception e) {
+                            throw new IllegalStateException(e);
+                        }
+                    };
+        int initialDelay = 0;
+        int period = 1;
+        multicast_loop.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
 
     while(true){
         try{
@@ -66,3 +95,5 @@ public class Server{
     }
     } 
 }
+
+

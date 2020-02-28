@@ -11,31 +11,40 @@ public class Client {
         }
         
 
-        //Prepare message
-    //try{
-
+        //Link to multicast group
         int multicast_port = Integer.parseInt(args[1]);
         InetAddress multicast_adress = InetAddress.getByName(args[0]);
-        String message = args[2] + " " + args[3];
-        byte[] sbuf = message.getBytes();
-        byte[] rbuf = new byte[256];
         byte[] mbuf = new byte[256];
-        
-        
-        MulticastSocket msocket = new MulticastSocket();
-        DatagramPacket mpacket = new DatagramPacket(mbuf, mbuf.length);
-        msocket.joinGroup(multicast_adress);
-        msocket.setLoopbackMode(true);
-        msocket.setTimeToLive(1);
-        msocket.receive(mpacket);
-        String serverIP = new String(rbuf, 0, mpacket.getLength());
-        System.out.println("Server IP: " + serverIP);
+        byte[] rbuf = new byte[256];
+        byte[] sbuf = new byte[256];
 
-        msocket.close();
-    }
+        MulticastSocket socket = new MulticastSocket(multicast_port);
+        DatagramPacket packet = new DatagramPacket(mbuf, mbuf.length);
+        socket.joinGroup(multicast_adress);
+        socket.setLoopbackMode(true);
+        socket.setTimeToLive(1);
+
+        socket.receive(packet);
+
+        socket.leaveGroup(multicast_adress);
+        
+
+        String response = new String(mbuf, 0, packet.getLength());
+        InetAddress serverPort = InetAddress.getByName(response);
+        InetAddress serverĨP = packet.getAddress();
+        socket.close();
+        System.out.println(serverĨP.getHostAddress());
+
+
+
+
+
+     //   byte[] sbuf = message.getBytes();
+     //  
+        
+    
         /*
-        DatagramSocket socket = new DatagramSocket();
-        DatagramPacket packet = new DatagramPacket(sbuf, sbuf.length, adress, port);
+        
 
         socket.send(packet);
         
@@ -53,6 +62,6 @@ public class Client {
     }
     catch(IOException ex){
         System.out.println("Client error: " + ex.getMessage());
-    }
     }*/
+    }
 }
