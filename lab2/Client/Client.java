@@ -16,8 +16,8 @@ public class Client {
         InetAddress multicast_adress = InetAddress.getByName(args[0]);
         byte[] mbuf = new byte[256];
         byte[] rbuf = new byte[256];
-        byte[] sbuf = new byte[256];
 
+     try{
         MulticastSocket socket = new MulticastSocket(multicast_port);
         DatagramPacket packet = new DatagramPacket(mbuf, mbuf.length);
         socket.joinGroup(multicast_adress);
@@ -30,30 +30,26 @@ public class Client {
         
 
         String response = new String(mbuf, 0, packet.getLength());
-        InetAddress serverPort = InetAddress.getByName(response);
-        InetAddress serverĨP = packet.getAddress();
+        int serverPort = packet.getPort();
+        InetAddress serverIP = packet.getAddress();
         socket.close();
-        System.out.println(serverĨP.getHostAddress());
+       
+       
+        String request = args[2] + " " + args[3];
+        byte[] sbuf = request.getBytes();
+       
+        DatagramSocket rsocket = new DatagramSocket();
+        DatagramPacket rpacket = new DatagramPacket(sbuf, sbuf.length, serverIP, serverPort);
 
-
-
-
-
-     //   byte[] sbuf = message.getBytes();
-     //  
-        
+        rsocket.send(rpacket);
     
-        /*
+   
         
+        DatagramPacket apacket = new DatagramPacket(rbuf, rbuf.length);
+        rsocket.receive(apacket);
+        String server_reply = new String(rbuf, 0, apacket.getLength());
 
-        socket.send(packet);
-        
-        
-        DatagramPacket rpacket = new DatagramPacket(rbuf, rbuf.length);
-        socket.receive(rpacket);
-        String response = new String(rbuf, 0, packet.getLength());
-
-        socket.close();
+        rsocket.close();
 
         System.out.println("Client: " + args[2] + " " + args[3] + " : " + response);
     }
@@ -62,6 +58,6 @@ public class Client {
     }
     catch(IOException ex){
         System.out.println("Client error: " + ex.getMessage());
-    }*/
+    }
     }
 }
