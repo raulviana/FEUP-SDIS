@@ -6,7 +6,7 @@ sudo iptables -A INPUT   -m pkttype --pkt-type multicast -j ACCEPT
 sudo iptables -A FORWARD -m pkttype --pkt-type multicast -j ACCEPT
 sudo iptables -A OUTPUT  -m pkttype --pkt-type multicast -j ACCEPT
 
-rmiregistry
+gnome-terminal -- rmiregistry &
 
 sleep .5
 

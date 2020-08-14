@@ -2,7 +2,7 @@
 #!/bin/bash
 
 
-javac *.java
+javac -d ../bin/Main Main/*.java
 
 gnome-terminal -- /bin/sh -c 'java Server 8080; echo "java Server 8080"; exec bash'
 
