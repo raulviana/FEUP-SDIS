@@ -16,7 +16,7 @@ gnome-terminal -- /bin/sh -c 'java Peer localhost 8080 8082; echo "java Peer loc
 
 #sleep 0.8
 
-#gnome-terminal -- /bin/sh -c 'java Peer localhost 8080 8083; echo "java Peer localhost 8080 8083"; exec bash'
+gnome-terminal -- /bin/sh -c 'java Peer localhost 8080 8083; echo "java Peer localhost 8080 8083"; exec bash'
 
 #sleep 0.8
 
