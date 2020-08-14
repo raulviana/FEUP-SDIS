@@ -1,5 +1,5 @@
 # FEUP-SDIS
-Repository for the **Distributed Systems** course
+Repository for the **Distributed Systems** course [(**SDIS**)](https://sigarra.up.pt/feup/pt/UCURR_GERAL.FICHA_UC_VIEW?pv_ocorrencia_id=436451)
 
 ## TP1
 
@@ -23,6 +23,8 @@ Retrieve local service state information
 For testing, just run *original_setup.sh*. It will start the *rmi* server and four peers. 
 
 ### Commands
+
+Each action can be executed running one of the following commands.
 
 | Function | Command/Example |
 | :------- | :-----: |
