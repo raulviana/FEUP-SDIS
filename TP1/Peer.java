@@ -126,7 +126,7 @@ public class Peer implements RMIinterface {
 
             String code = file.getID() + "_" + String.valueOf(chunk.getID());
             if (!storage.getRemoteOcurrences().containsKey(code)) {
-                sdeletetorage.getRemoteOcurrences().put(code, 0);
+                storage.getRemoteOcurrences().put(code, 0);
             }
 
 

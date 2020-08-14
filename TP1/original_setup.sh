@@ -6,11 +6,11 @@ sudo iptables -A INPUT   -m pkttype --pkt-type multicast -j ACCEPT
 sudo iptables -A FORWARD -m pkttype --pkt-type multicast -j ACCEPT
 sudo iptables -A OUTPUT  -m pkttype --pkt-type multicast -j ACCEPT
 
-gnome-terminal -- rmiregistry
+rmiregistry
 
 sleep .5
-java Peer 1.0 1 Peer1 224.0.0.15 8001 224.0.0.16 8002 224.0.0.17 8003
-gnome-terminal -- 
+
+gnome-terminal -- java Peer 1.0 1 Peer1 224.0.0.15 8001 224.0.0.16 8002 224.0.0.17 8003
 
 sleep .5
 
@@ -18,7 +18,7 @@ gnome-terminal -- java Peer 1.0 2 Peer2 224.0.0.15 8001 224.0.0.16 8002 224.0.0.
 
 sleep .5
 
-#nome-terminal -- java Peer 1.0 3 Peer3 224.0.0.15 8001 224.0.0.16 8002 224.0.0.17 8003
+gnome-terminal -- java Peer 1.0 3 Peer3 224.0.0.15 8001 224.0.0.16 8002 224.0.0.17 8003
 
 sleep .5
 
